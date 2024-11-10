@@ -155,6 +155,7 @@ void task_system_update(void *parameters)
 		switch (p_task_system_dta->state)
 		{
 			case ST_SYS_01_AUTOAUSENTE:
+
 				if((true == p_task_system_dta->flag) && (EV_SYS_01_SENSOR_MAGNETICO_ACTIVO ==  p_task_system_dta->event))
 				{
 					p_task_system_dta->flag = false;
@@ -180,7 +181,7 @@ void task_system_update(void *parameters)
 				}
 				else if((true == p_task_system_dta->flag) && (EV_SYS_01_BTN_DOWN == p_task_system_dta->event)){
 					p_task_system_dta->flag = false;
-					//put_event_task_actuator(EV_LED_XX_ON, ID_LED_A);
+					put_event_task_actuator(EV_LED_XX_PULSE, ID_LED_01_GENERAR_TICKET);
 					p_task_system_dta->state = ST_SYS_01_RETIRAR_TICKET;
 				}
 
@@ -189,13 +190,13 @@ void task_system_update(void *parameters)
 			case ST_SYS_01_RETIRAR_TICKET:
 				if((true == p_task_system_dta->flag) && (EV_SYS_01_SENSOR_TICKET_NO_ACTIVO == p_task_system_dta->event)){
 					p_task_system_dta->flag = false;
-					put_event_task_actuator(EV_LED_XX_ON, EV_LED_02_SUBIR_BARRERA);
+					put_event_task_actuator(EV_LED_XX_BLINK, ID_LED_02_SUBIR_BARRERA);
 					p_task_system_dta->state = ST_SYS_01_BARRERA_SUBIENDO;
 				}
 
 				else if((true == p_task_system_dta->flag) && (EV_SYS_01_SENSOR_MAGNETICO_NO_ACTIVO== p_task_system_dta->event)){
 					p_task_system_dta->flag = false;
-					put_event_task_actuator(EV_LED_XX_ON, EV_LED_01_TRAGAR_TICKET);
+					put_event_task_actuator(EV_LED_XX_PULSE, ID_LED_01_TRAGAR_TICKET);
 					p_task_system_dta->state = ST_SYS_01_AUTOAUSENTE;
 				}
 
@@ -204,6 +205,7 @@ void task_system_update(void *parameters)
 			case ST_SYS_01_BARRERA_SUBIENDO:
 				if((true == p_task_system_dta->flag) && (EV_SYS_01_FINAL_CARRERA_SUPERIOR == p_task_system_dta->event)){
 					p_task_system_dta->flag = false;
+					put_event_task_actuator(EV_LED_XX_OFF, ID_LED_02_SUBIR_BARRERA);
 					p_task_system_dta->state = ST_SYS_01_BARRERA_ARRIBA;
 				}
 				break;
@@ -216,7 +218,7 @@ void task_system_update(void *parameters)
 
 				else if((true == p_task_system_dta->flag) && (EV_SYS_01_SENSOR_MAGNETICO_NO_ACTIVO== p_task_system_dta->event)){
 					p_task_system_dta->flag = false;
-					put_event_task_actuator(EV_LED_XX_ON, EV_LED_02_BAJAR_BARRERA);
+					put_event_task_actuator(EV_LED_XX_BLINK, ID_LED_02_BAJAR_BARRERA);
 					p_task_system_dta->state = ST_SYS_01_BARRERA_BAJANDO;
 				}
 				break;
@@ -224,7 +226,7 @@ void task_system_update(void *parameters)
 			case ST_SYS_01_AUTO_BARRERA:
 				if((true == p_task_system_dta->flag) && (EV_SYS_01_SENSOR_LASER_NO_ACTIVO == p_task_system_dta->event)){
 					p_task_system_dta->flag = false;
-					put_event_task_actuator(EV_LED_XX_ON, EV_LED_02_BAJAR_BARRERA);
+					put_event_task_actuator(EV_LED_XX_BLINK, ID_LED_02_BAJAR_BARRERA);
 					p_task_system_dta->state = ST_SYS_01_BARRERA_BAJANDO;
 				}
 				break;
@@ -232,6 +234,7 @@ void task_system_update(void *parameters)
 			case ST_SYS_01_BARRERA_BAJANDO:
 				if((true == p_task_system_dta->flag) && (EV_SYS_01_FINAL_CARRERA_INFERIOR == p_task_system_dta->event)){
 					p_task_system_dta->flag = false;
+					put_event_task_actuator(EV_LED_XX_OFF, ID_LED_02_BAJAR_BARRERA);
 					p_task_system_dta->state = ST_SYS_01_AUTOAUSENTE;
 				}
 				break;
